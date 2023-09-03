@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { ConvertToSpacesPipe } from 'src/shared/pipe/convert-to-spaces.pipe';
 import { StarComponent } from 'src/shared/star/star-component';
@@ -18,7 +19,8 @@ import { ProductListComponent } from './products/product-list/product-list.compo
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ProductService } from './product.service';
 import { IProduct } from './products';
 
@@ -8,14 +9,18 @@ import { IProduct } from './products';
   styleUrls: ['./product-list.component.css']
   
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy{
   pageTitle:string='Product List';
   imageWidth:number=30;
   imageMargin:number=10;
   showImage:boolean=false;
+  errorMessage: string='';
+  sub!: Subscription;
+  //sub!:Subscriber;
   //filterText:string='';
   // set value of filterText by using Getters and Setters method
   private _filterText:string='';
+  
   
   get filterText():string{
     return this._filterText;
@@ -87,9 +92,26 @@ export class ProductListComponent implements OnInit {
   ngOnInit(): void {
     //console.log(this._filterText);
     //this.filterText='Laptop';
+    /*Calling list of products from hardcoded json in service
     this.products=this.productService.getProducts();
     this.filterProducts=this.products;
+    */
 
+    //Calling products via HttpClient
+    this.sub=this.productService.getProducts().subscribe({
+      next: data=>{
+        console.log(JSON.stringify(data));
+        
+        this.products=data;
+        this.filterProducts=this.products;
+      },
+      error:error=>this.errorMessage=error
+    });
+
+  }
+
+  ngOnDestroy(){
+    this.sub.unsubscribe();
   }
 
   toggleImage(){
